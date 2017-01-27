@@ -1,20 +1,28 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+import javax.swing.text.MaskFormatter;
+
 public class Board {
-	private char[][]board;
+	private static char[][]board;
 	char player1Char;
 	char player2Char;
-	int boardSize;
+	static int boardSize;
 	public static int filled;
 	public static int status;
 	public static final int PLAYER1WON = 1;
 	public static final int PLAYER2WON = 2;
 	public static final int NOT_FINISHED = 0;
-	public static final int DRAW = 3;
-	int p1Pos,p2Pos;
+
+	static int p1Pos,p2Pos;
 	public Board(int side) {
 		board = new char[side][side];
 		for (int i = 0; i < side; i++) {
 			for(int j = 0; j < side; j++) {
-				board[i][j] = ' ';
+				board[i][j] = '?';
 			}
 		}
 		this.player1Char = '1';
@@ -25,7 +33,7 @@ public class Board {
 		status=NOT_FINISHED;
 		filled=2;
 	}
-	
+
 	public void printBoard() {
 		for(int xiter=0;xiter<boardSize;++xiter){
 			for(int yiter=0;yiter<boardSize;++yiter){
@@ -34,8 +42,8 @@ public class Board {
 			System.out.println();
 		}	
 	}
-	
-	public boolean makeAMove(int nxtRow,int nxtCol,char symbol,GameManager1 gm){
+
+	public static boolean makeAMove(int nxtRow,int nxtCol,char symbol){
 		char oppo;
 		if(symbol=='1')oppo='2';
 		else oppo='1';
@@ -85,8 +93,50 @@ public class Board {
 			}
 		}
 		board[nxtRow][nxtCol]=symbol;
-		gm.changebuttoncolors(nxtRow, nxtCol, symbol, curRow, curCol);
+		GameManager1.changebuttoncolors(nxtRow, nxtCol, symbol, curRow, curCol);
 		return true;
+	}
+
+	public static void performWrite(char symbol) throws IOException {
+		FileWriter out=new FileWriter("curBoard.txt");
+		out.write(String.valueOf(boardSize));
+		out.write('\n');
+		int row1=p1Pos/boardSize,row2=p2Pos/boardSize,col1=p1Pos%boardSize,col2=p2Pos%boardSize;
+		if(symbol=='1'){
+			board[row1][col1]='U';
+			board[row2][col2]='X';
+		}else{
+			board[row1][col1]='X';
+			board[row2][col2]='U';
+		}
+		for(int i=0;i<boardSize;++i){
+			for(int j=0;j<boardSize;++j)
+				out.write(board[i][j]);
+			out.write('\n');
+		}
+		board[row1][col1]='1';
+		board[row2][col2]='2';
+		out.close();
 	}	
-	
+
+	public static boolean performRead(char symbol) throws IOException{
+		int para1=-1,para2=-1;
+		//read here
+		FileReader in=null;
+		try {
+			in=new FileReader("move.txt");
+			Scanner s=new Scanner(in);
+			if(s.hasNext())
+				para1=s.nextInt();
+			if(s.hasNext())
+				para2=s.nextInt();
+			s.close();
+		} catch (FileNotFoundException e) {
+			//do nothing
+		}finally{
+			if(in!=null)
+				in.close();
+			return makeAMove(para1, para2, symbol);
+		}	
+	}
 }
