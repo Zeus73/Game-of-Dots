@@ -8,13 +8,13 @@ pair<int,int> myMove(vector<vector<char> >&board){
 	// '.' denotes a visited cell
 	// '?' denotes an unvisited cell
 	
-	int n=board.size();
-	for(int i=n-1;i>=0;--i)
-		for(int j=n-1;j>=0;--j)
+	int side=board.size();
+	for(int i=side-1;i>=0;--i)
+		for(int j=side-1;j>=0;--j)
 			if(board[i][j]=='U')
 				return make_pair(i-1,j-1);
 		
-	return make_pair(n,n);	
+	return make_pair(side,side);	
 }
 
 int main(){

@@ -7,9 +7,9 @@ pair<int,int> myMove(vector<vector<char> >&board){
 	// n denotes the length of each side of square board
 	// '.' denotes a visited cell
 	// '?' denotes an unvisited cell
-	int n=board.size();
-	for(int i=0;i<n;++i)
-		for(int j=0;j<n;++j)
+	int side=board.size();
+	for(int i=0;i<side;++i)
+		for(int j=0;j<side;++j)
 			if(board[i][j]=='U')
 				return make_pair(i+1,j+1);
 		

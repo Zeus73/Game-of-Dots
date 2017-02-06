@@ -28,6 +28,7 @@ import javax.swing.border.LineBorder;
 
 
 public class GameManager1 extends JFrame {
+	public static final String MYDIRECTORY="C:\\Users\\Zeus\\workspace\\GameOfDots\\";
 
 	private static int getRandomNumberInRange(int min, int max) {
 
@@ -59,13 +60,28 @@ public class GameManager1 extends JFrame {
 	static JTextArea display = new JTextArea(1,20);
 	Font font = new Font("Times new Roman", Font.BOLD, 14);
 
-	public GameManager1()  {
+	public GameManager1() throws InterruptedException  {
 
 		super("Game of Dots");
 
-		p1 = Player.takePlayerInput(1,'1');
-		p2 = Player.takePlayerInput(2,'2');
+		try {
+			p1 = Player.takePlayerInput(1,'1');
+			p2 = Player.takePlayerInput(2,'2');
+			if(p1.pLang==Player.CPPLang){
+				Runtime.getRuntime().exec("cmd.exe /c g++ -o pl1C pl1C.cpp",null,new File(MYDIRECTORY));
+			}else{
+				Runtime.getRuntime().exec("cmd.exe /c javac pl1J.java",null,new File(MYDIRECTORY));
+			}
+			if(p2.pLang==Player.CPPLang){
+				Runtime.getRuntime().exec("cmd.exe /c g++ -o pl2C pl2C.cpp",null,new File(MYDIRECTORY));
+			}else{
+				Runtime.getRuntime().exec("cmd.exe /c javac pl2J.java",null,new File(MYDIRECTORY));
+			}
+			Thread.sleep(3000);
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		b  = new Board(boardSize);
 
@@ -92,7 +108,7 @@ public class GameManager1 extends JFrame {
 			button[i] = new JButton();
 			button[i].setText(buttonString);
 			button[i].setFont(font);
-//			button[i].addActionListener(this);
+			//			button[i].addActionListener(this);
 		}
 
 
@@ -115,8 +131,8 @@ public class GameManager1 extends JFrame {
 		setVisible(true);
 		button[0].setBackground(Color.BLUE);
 		button[boardSize*boardSize-1].setBackground(Color.YELLOW);
-//
-//		play();
+		//
+		//		play();
 	}
 
 
@@ -132,7 +148,7 @@ public class GameManager1 extends JFrame {
 	}
 	static boolean player1Turn = false;
 	static String showNow="";
-	
+
 	private static void play() throws InterruptedException, IOException{
 
 		player1Turn = !player1Turn;
@@ -140,23 +156,35 @@ public class GameManager1 extends JFrame {
 			currentPlayer = p1;
 		else
 			currentPlayer = p2;
-		
+
 		showNow+=currentPlayer.name + "'s turn";
 		display.setText(showNow);
 		showNow="";
-		
+
 		//write to file
 		Board.performWrite(currentPlayer.symbol);
 		//Execute C++ program here
-		if(player1Turn)
-			Runtime.getRuntime().exec("pl1.exe",null,new File("C:\\Users\\Zeus\\workspace\\GameOfDots\\"));
-		else
-			Runtime.getRuntime().exec("pl2.exe",null,new File("C:\\Users\\Zeus\\workspace\\GameOfDots\\"));
-		Thread.sleep(2000);
+		if(player1Turn){
+			if(p1.pLang==Player.CPPLang)
+				Runtime.getRuntime().exec("pl1C.exe",null,new File(MYDIRECTORY));
+			else
+				Runtime.getRuntime().exec("cmd.exe /c java pl1J",null,new File(MYDIRECTORY));
+						
+		}
+			
+		else{
+			if(p2.pLang==Player.CPPLang)
+				Runtime.getRuntime().exec("pl2C.exe",null,new File(MYDIRECTORY));
+			else
+				Runtime.getRuntime().exec("cmd.exe /c java pl2J",null,new File(MYDIRECTORY));
+			
+		}
+			
+		Thread.sleep(3000);
 		//read file now
 		Board.performRead(currentPlayer.symbol);
 		//if(no changes in file) declare other winner
-		
+
 	}			//end of play
 
 	public static void main(String[] args) throws InterruptedException, IOException {
@@ -164,7 +192,7 @@ public class GameManager1 extends JFrame {
 		while(b.status==Board.NOT_FINISHED){
 			play();
 		}
-		
+
 		if (b.status==Board.PLAYER1WON) {
 			showNow+=(p1.name + " won");
 		} else{
@@ -174,25 +202,25 @@ public class GameManager1 extends JFrame {
 	}
 
 
-//	@Override
-//	public void actionPerformed(ActionEvent ae) {
-//		int iter=0;
-//		for(iter=0;iter<boardSize*boardSize;++iter){
-//			if(ae.getSource()==button[iter])
-//				break;
-//		}
-//		if(iter==boardSize*boardSize)
-//			iter=-1;
-//		int x=iter/boardSize;
-//		int y=iter%boardSize;
-//
-//		boolean done = b.makeAMove(x,y, currentPlayer.symbol);
-//		if(!done){
-//			showNow="Invalid move by "+currentPlayer.name+'\n';
-//		}
-//		play();
-//
-//	}
+	//	@Override
+	//	public void actionPerformed(ActionEvent ae) {
+	//		int iter=0;
+	//		for(iter=0;iter<boardSize*boardSize;++iter){
+	//			if(ae.getSource()==button[iter])
+	//				break;
+	//		}
+	//		if(iter==boardSize*boardSize)
+	//			iter=-1;
+	//		int x=iter/boardSize;
+	//		int y=iter%boardSize;
+	//
+	//		boolean done = b.makeAMove(x,y, currentPlayer.symbol);
+	//		if(!done){
+	//			showNow="Invalid move by "+currentPlayer.name+'\n';
+	//		}
+	//		play();
+	//
+	//	}
 
 	public static void changebuttoncolors(int xaxis,int yaxis,char symb,int tX,int tY){
 		button[tX*boardSize+tY].setBackground(Color.BLACK);

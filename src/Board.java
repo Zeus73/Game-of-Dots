@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.swing.text.MaskFormatter;
-
 public class Board {
 	private static char[][]board;
 	char player1Char;
