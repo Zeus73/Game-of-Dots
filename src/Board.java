@@ -121,7 +121,7 @@ public class Board {
 		int para1=-1,para2=-1;
 		//read here
 		FileReader in=null;
-		FileWriter out=new FileWriter("move.txt");
+		
 		
 		try {
 			in=new FileReader("move.txt");
@@ -130,13 +130,15 @@ public class Board {
 				para1=s.nextInt();
 			if(s.hasNext())
 				para2=s.nextInt();
-			out.write("-1 -1");
+			
 			s.close();
 		} catch (FileNotFoundException e) {
 			//do nothing
 		}finally{
 			if(in!=null)
 				in.close();
+			FileWriter out=new FileWriter("move.txt");
+			out.write("-1 -1");
 			out.close();
 			return makeAMove(para1, para2, symbol);
 		}	

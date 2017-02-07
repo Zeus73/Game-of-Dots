@@ -28,7 +28,7 @@ import javax.swing.border.LineBorder;
 
 
 public class GameManager1 extends JFrame {
-	public static final String MYDIRECTORY="C:\\Users\\Zeus\\workspace\\GameOfDots\\";
+	public static final String MYDIRECTORY="C:\\Users\\Zeus\\workspace\\Game-of-Dots\\";
 
 	private static int getRandomNumberInRange(int min, int max) {
 
@@ -67,17 +67,19 @@ public class GameManager1 extends JFrame {
 		try {
 			p1 = Player.takePlayerInput(1,'1');
 			p2 = Player.takePlayerInput(2,'2');
+			Process p;
 			if(p1.pLang==Player.CPPLang){
-				Runtime.getRuntime().exec("cmd.exe /c g++ -o pl1C pl1C.cpp",null,new File(MYDIRECTORY));
+				p=Runtime.getRuntime().exec("cmd.exe /c g++ -o pl1C pl1C.cpp",null,new File(MYDIRECTORY));
 			}else{
-				Runtime.getRuntime().exec("cmd.exe /c javac pl1J.java",null,new File(MYDIRECTORY));
+				p=Runtime.getRuntime().exec("cmd.exe /c javac pl1J.java",null,new File(MYDIRECTORY));
 			}
+			p.waitFor();
 			if(p2.pLang==Player.CPPLang){
-				Runtime.getRuntime().exec("cmd.exe /c g++ -o pl2C pl2C.cpp",null,new File(MYDIRECTORY));
+				p=Runtime.getRuntime().exec("cmd.exe /c g++ -o pl2C pl2C.cpp",null,new File(MYDIRECTORY));
 			}else{
-				Runtime.getRuntime().exec("cmd.exe /c javac pl2J.java",null,new File(MYDIRECTORY));
+				p=Runtime.getRuntime().exec("cmd.exe /c javac pl2J.java",null,new File(MYDIRECTORY));
 			}
-			Thread.sleep(3000);
+			p.waitFor();
 
 		} catch (IOException e) {
 			e.printStackTrace();
