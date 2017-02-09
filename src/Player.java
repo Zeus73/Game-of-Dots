@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Player {
@@ -13,13 +14,15 @@ public class Player {
 		this.symbol=symbol;
 	}
 	
-	public static Player takePlayerInput(int playerNumber,char symb) {
-		System.out.println("Enter player " + playerNumber + " name: ");
-		String name = s.nextLine();
-		System.out.println("Choose ur Language\n1.C++\n2.Java");
-		int choice=s.nextInt();
-		s.nextLine();
-		return new Player(name,choice,symb);
-	}
+//	public static Player takePlayerInput(int playerNumber,char symb) {
+//		System.out.println("Enter player " + playerNumber + " name: ");
+////		String name = s.nextLine();
+//		String name="aman";
+//		System.out.println("Choose ur Language\n1.C++\n2.Java");
+////		int choice=s.nextInt();
+//		int choice=1;
+////		s.nextLine();
+//		return new Player(name,choice,symb);
+//	}
 	
 }
